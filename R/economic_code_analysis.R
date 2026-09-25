@@ -1,7 +1,7 @@
 ##################################################################################
-#########       Script for Training of Budget Officers            ###############
-#########       Finance Division, Ministry of Finance             ##############
-#########       Prepared by:- Md. Anisur Rahman Bali              ##############
+#           Script for Preparing multiple codewise graphs     
+#           Finance Division, Ministry of Finance             
+#           Prepared by:- Md. Anisur Rahman Bali              
 ################################################################################
 
 rm(list = ls())
@@ -13,64 +13,38 @@ library(dplyr)
 library(tidyr)
 library(ragg)
 library(ggplot2)
+library(here)
 
 
 
 
-if (Sys.getenv("USERNAME") == "bmani")  {
-  drive <- "C:/Users/bmani/OneDrive/Finance Division/"
-  
-  
-} else if (Sys.getenv("USERNAME") == "Shihab") {
-  
-  drive <- "C:/Users/User/OneDrive/Finance Division/"
-  output <- "C:/github/office_task/output"
-  
-} else {
-  "Device Not available"
-}
 
 
-
-
-file_path <- paste0(drive, "Trainings/R Training Materials")
-
-
-df <- read_xlsx(paste0(file_path,"/116_detail_budget_Total.xlsx"))
+df <- read_xlsx(here("data", "raw", "116_detail_budget_Total.xlsx"))
 
 
 #################################################################
-#           Office Wise Economic Code Analysis for Operating
+#           Office Wise Economic Code Analysis for Operating Budget
 ################################################################
-
-
-## give the directory for output, I will save to the filepath
 
 
 df_op <- df %>%
   filter(is.na(activity_code) | substr(as.character(activity_code), 1, 1) == "1" )
 
 
-## get a list of offices
-
-office_list <- df_op %>%
-  distinct(office_code) 
-
-## get a list of group offices
-
-office_group <- df_op %>%
-  distinct(group_code)
 
 ## summarize econnomic group over office groups
 
 # Columns to be summed
 value_cols <- c(
-  "budget_2021_22", "budget_2022_23", "budget_2023_24", "budget_2024_25", "budget_2025_26",
-  "actual_2021_22", "actual_2022_23", "actual_2023_24", "actual_2024_25", "actual_2025_26",
-  "revised_2021_22", "revised_2022_23", "revised_2023_24", "revised_2024_25", "revised_2025_26",
+  "budget_2020_21", "budget_2021_22", "budget_2022_23", "budget_2023_24", "budget_2024_25", "budget_2025_26",
+  "actual_2020_21", "actual_2021_22", "actual_2022_23", "actual_2023_24", "actual_2024_25", "actual_2025_26",
+  "revised_2020_21", "revised_2021_22", "revised_2022_23", "revised_2023_24", "revised_2024_25", "revised_2025_26",
   "budget_2026_27", "budget_2027_28", "budget_2028_29"
 )
 
+
+# make group office and generel / activity wise economic code values
 
 df_op_group <- df_op %>% 
   group_by(group_code, group_name, activity_code, eco_code, eco_name) %>% 
@@ -82,8 +56,11 @@ df_op_group <- df_op %>%
 ## for every office group and activity type generate a graph for each
 # economic code under general activity or special activity
 
-for (i in 1:20){  #nrow(df_op_group)
-  row <- df_op_group[i, ]
+for (i in 1:nrow(df_op_group)){  #nrow(df_op_group)
+  
+  # df_op_group has 531 rows it will generate all of them
+  
+  row <- df_op_group[i, ]  # every time taking only one row
   
   row <- row %>% pivot_longer(
     cols = c(6:last_col()),
@@ -103,9 +80,10 @@ for (i in 1:20){  #nrow(df_op_group)
   codename <- row$eco_name[1]
   office_group <- row$group_code[1]
   office_name <- row$group_name[1]
+  activity <- row$activity_code[1]
   
   # draw the image 
-  agg_png(paste0(output,"/", office_group, "/", econcode, ".png"), width = 8, height = 6, units = "in", res = 300)
+  agg_png(here("output", "office_group", office_group, paste0(econcode, ".png")), width = 8, height = 6, units = "in", res = 300)
   p <-ggplot(row, 
            aes(x = year, 
                y = amount, 
@@ -113,8 +91,10 @@ for (i in 1:20){  #nrow(df_op_group)
                color = type)) +
     geom_line(linewidth = 1) +
     
+  
+    
     labs(
-      title = paste(econcode, "-", codename, "    ", office_name),
+      title = paste(econcode, "-", codename, "    ", office_name, activity),
       color = "Legend",
       y = "টাকা (কোটি)"
       
@@ -133,8 +113,9 @@ for (i in 1:20){  #nrow(df_op_group)
   print(p)
   dev.off()
   
-  print(paste(office_group, "printing", econcode ))
-  print(cat(i, "out of", nrow(df_op_group)))
+  if (i %% 10 == 0){
+  print(cat(round(i/nrow(df_op_group) * 100, 0),"%", "Complete" ))
+  }
 }
 
 
@@ -157,8 +138,22 @@ df_office <- df_op %>%
 ## for every office group and activity type generate a graph for each
 # economic code under general activity or special activity
 
+# nrow(df_office) has 657 rows. running the following loop will generate 657 graphs
+
+# we can shorten to specific criteria. For example, generate graphs only if the present year
+# budget exceeds 5% of previous year's
+
 for (i in 1:nrow(df_office)){  #nrow(df_office)
-  row <- df_office[i, ]
+  
+  # Condition to filter the graphs
+  
+  # row <- df_office[i, ]
+  # 
+  # increase <- row$budget_2026_27 / row$revised_2025_26
+  # 
+  # if (is.nan(increase) | increase  < 1.05){
+  #   next
+  # }
   
   row <- row %>% pivot_longer(
     cols = c(6:last_col()),
@@ -176,11 +171,11 @@ for (i in 1:nrow(df_office)){  #nrow(df_office)
   
   # econcode <- row$eco_code[1]
   # codename <- row$eco_name[1]
-  office_group <- row$office_code[1]
+  office_code <- row$office_code[1]
   office_name <- row$office_name[1]
   
   # draw the image 
-  agg_png(paste0(output,"/office_wise/", office_group, ".png"), width = 8, height = 6, units = "in", res = 300)
+  agg_png(here("output", "office", paste0(office_code, ".png")), width = 8, height = 6, units = "in", res = 300)
   p <-ggplot(row, 
              aes(x = year, 
                  y = amount, 
@@ -208,7 +203,9 @@ for (i in 1:nrow(df_office)){  #nrow(df_office)
   print(p)
   dev.off()
   
-  # print(paste(office_group, "printing", econcode ))
-  print(cat(i, "out of", nrow(df_office)))
+  
+  if (i %% 10 == 0){
+    print(cat(round(i/nrow(df_op_group) * 100, 0),"%", "Complete" ))
+  }
 }
 

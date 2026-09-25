@@ -1,5 +1,5 @@
 ##################################################################################
-#########       Script for Training of Budget Officers            ###############
+#########       Script for Preparing Working Paper Graphs         ###############
 #########       Finance Division, Ministry of Finance             ##############
 #########       Prepared by:- Md. Anisur Rahman Bali              ##############
 ################################################################################
