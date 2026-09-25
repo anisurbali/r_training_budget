@@ -1,0 +1,300 @@
+---
+title: "budget_analysis"
+format:
+  docx:
+    reference-doc: reference.docx
+    
+execute:
+  echo: false
+  message: false
+  warning: false
+---
+
+ বিভাগের বিগত ৫ অর্থবছরের বাজেট বরাদ্দ ও ব্যয়ের হিসাব পর্যালোচনা (সম্পদ ব্যবহারের সক্ষমতা)
+
+```{r table1}
+library(tidyr)
+library(dplyr)
+library(flextable)
+library(here)
+
+table1 <- readRDS(
+  here("data", "processed", "table1.rds")
+)
+
+
+
+table1 <- table1 %>%
+  pivot_wider(
+    names_from = type,
+    values_from = amount
+  )
+
+table1 <- table1 %>%
+  mutate(ratio = actual/revised * 100)
+
+table1$year <- gsub("_", "-", table1$year)
+
+
+table1 <- table1 |> 
+  bind_rows(
+     tibble(
+      year    = "গত ৫ বছরের গড় সক্ষমতা",
+      budget  = NA,
+      revised = NA,
+      actual  = NA,
+      ratio    = mean(table1$ratio)
+    )
+  )
+
+set_flextable_defaults(font.family = "NikoshBAN")
+
+ft <- flextable(table1)
+
+ft <- delete_part(x = ft, part = "header")
+
+ft <- add_header_row(
+  ft,
+  values = c("অর্থ বছর",
+             "মূল বাজেট বরাদ্দ",
+             "সংশোধিত বাজেট বরাদ্দ",
+             "প্রকৃত ব্যয়",
+             "ব্যয়ের শতকরা হার (%)"
+            ))
+
+ft <- add_header_row(ft,
+                     values = "বিভাগের বাজেট",
+                     colwidths = ncol(table1))
+
+
+
+ft <- colformat_double(
+  ft,
+  j = 2:4,
+  digits = 2,
+  big.mark = ","
+)
+
+# Merge first 4 columns of the last row
+ft <- merge_at(
+  ft,
+  i = 6,
+  j = 1:4,
+  part = "body"
+)
+
+ft <- border(
+  x = ft,
+  border = officer::fp_border(color = "black", width = 1),
+  part = "all"
+) |>
+  bold(part = "header") |>
+  align(
+    i = 1,
+    align = "center",
+    part = "header"
+  )
+
+
+ft <- colformat_double(
+  ft,
+  j = 5,
+  digits = 2,
+  big.mark = ",",
+  suffix = "%"
+)
+
+
+ft
+```
+
+
+বিভাগের বিগত ৫ অর্থবছরের পরিচালন ব্যয়ের সক্ষমতা
+
+
+```{r table2}
+
+
+
+table1 <- readRDS(
+  here("data", "processed", "table2.rds")
+)
+
+
+
+table1 <- table1 %>%
+  pivot_wider(
+    names_from = type,
+    values_from = amount
+  )
+
+table1 <- table1 %>%
+  mutate(ratio = actual/revised * 100)
+
+table1$year <- gsub("_", "-", table1$year)
+
+
+
+table1 <- table1 |> 
+  bind_rows(
+     tibble(
+      year    = "গত ৫ বছরের গড় সক্ষমতা",
+      budget  = NA,
+      revised = NA,
+      actual  = NA,
+      ratio    = mean(table1$ratio)
+    )
+  )
+
+set_flextable_defaults(font.family = "NikoshBAN")
+
+ft <- flextable(table1)
+
+ft <- delete_part(x = ft, part = "header")
+
+ft <- add_header_row(
+  ft,
+  values = c("অর্থ বছর",
+             "মূল বাজেট বরাদ্দ",
+             "সংশোধিত বাজেট বরাদ্দ",
+             "প্রকৃত ব্যয়",
+             "ব্যয়ের শতকরা হার (%)"
+            ))
+
+ft <- add_header_row(ft,
+                     values = "পরিচালন",
+                     colwidths = ncol(table1))
+
+
+ft <- border(
+  x = ft,
+  border = officer::fp_border(color = "black", width = 1),
+  part = "all"
+) |>
+  bold(part = "header") |>
+  align(
+    i = 1,
+    align = "center",
+    part = "header"
+  )
+
+
+ft <- colformat_double(
+  ft,
+  j = 2:4,
+  digits = 2,
+  big.mark = ","
+)
+
+# Merge first 4 columns of the last row
+ft <- merge_at(
+  ft,
+  i = 6,
+  j = 1:4,
+  part = "body"
+)
+
+ft <- colformat_double(
+  ft,
+  j = 5,
+  digits = 2,
+  big.mark = ",",
+  suffix = "%"
+)
+
+
+ft
+```
+
+বিভাগের বিগত ৫ অর্থবছরের উন্নয়ন ব্যয়ের সক্ষমতা
+
+```{r table3}
+
+table1 <- readRDS(
+  here("data", "processed", "table3.rds")
+)
+
+table1 <- table1 %>%
+  pivot_wider(
+    names_from = type,
+    values_from = amount
+  )
+
+table1 <- table1 %>%
+  mutate(ratio = actual/revised * 100)
+
+table1$year <- gsub("_", "-", table1$year)
+
+
+
+table1 <- table1 |> 
+  bind_rows(
+     tibble(
+      year    = "গত ৫ বছরের গড় সক্ষমতা",
+      budget  = NA,
+      revised = NA,
+      actual  = NA,
+      ratio    = mean(table1$ratio)
+    )
+  )
+
+set_flextable_defaults(font.family = "NikoshBAN")
+
+ft <- flextable(table1)
+
+ft <- delete_part(x = ft, part = "header")
+
+ft <- add_header_row(
+  ft,
+  values = c("অর্থ বছর",
+             "মূল বাজেট বরাদ্দ",
+             "সংশোধিত বাজেট বরাদ্দ",
+             "প্রকৃত ব্যয়",
+             "ব্যয়ের শতকরা হার (%)"
+            ))
+
+ft <- add_header_row(ft,
+                     values = "পরিচালন",
+                     colwidths = ncol(table1))
+
+
+ft <- border(
+  x = ft,
+  border = officer::fp_border(color = "black", width = 1),
+  part = "all"
+) |>
+  bold(part = "header") |>
+  align(
+    i = 1,
+    align = "center",
+    part = "header"
+  )
+
+
+ft <- colformat_double(
+  ft,
+  j = 2:4,
+  digits = 2,
+  big.mark = ","
+)
+
+# Merge first 4 columns of the last row
+ft <- merge_at(
+  ft,
+  i = 6,
+  j = 1:4,
+  part = "body"
+)
+
+ft <- colformat_double(
+  ft,
+  j = 5,
+  digits = 2,
+  big.mark = ",",
+  suffix = "%"
+)
+
+
+ft
+```
+
