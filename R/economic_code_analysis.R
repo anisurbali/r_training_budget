@@ -56,7 +56,7 @@ df_op_group <- df_op %>%
 ## for every office group and activity type generate a graph for each
 # economic code under general activity or special activity
 
-for (i in 1:nrow(df_op_group)){  #nrow(df_op_group)
+for (i in 1:50){  #nrow(df_op_group)
   
   # df_op_group has 531 rows it will generate all of them
   
@@ -91,7 +91,9 @@ for (i in 1:nrow(df_op_group)){  #nrow(df_op_group)
                color = type)) +
     geom_line(linewidth = 1) +
     
-  
+    geom_text(aes(label = sprintf("%.2f", amount)),
+              vjust = -0.7,
+              size = 3) +
     
     labs(
       title = paste(econcode, "-", codename, "    ", office_name, activity),
@@ -182,6 +184,11 @@ for (i in 1:nrow(df_office)){  #nrow(df_office)
                  group = type,
                  color = type)) +
     geom_line(linewidth = 1) +
+    
+    geom_text(aes(label = sprintf("%.2f", amount)),
+              vjust = -0.7,
+              size = 3) +
+    
     
     labs(
       title = paste(office_group, "-", office_name),

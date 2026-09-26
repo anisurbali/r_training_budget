@@ -17,6 +17,7 @@
 \usepackage{multicol}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage{booktabs}
 
 % -------------------------------------------------
 % R code style
@@ -429,13 +430,45 @@
 	\end{frame}
 	
 	
-	\begin{frame}[fragile]{Import a Data Frame and Explore}
+	\begin{frame}[fragile]{Importing Data}
 		
-		Useful commands:
+		R can work with many formats:
+		
+		\begin{itemize}
+			\item CSV
+			\item Excel
+			\item Stata
+			\item SPSS
+			\item SAS
+			\item SQL databases
+			\item JSON
+		\end{itemize}
+		
+		CSV example:
 		
 		\begin{lstlisting}
+			library(readr)
+			df <- read_csv("budget.csv")
+		\end{lstlisting}
+		
+		Excel:
+		
+		\begin{lstlisting}
+			library(readxl)
+			df <- read_excel("budget.xlsx")
+		\end{lstlisting}
+		
+	\end{frame}
+	
+	
+	
+	\begin{frame}[fragile]{Import a Data Frame and Explore}
+		
+		Import the exercise.xlsx file:
+		
+		\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 			# import the exercise file in the data>raw folder
-			
+		
 			library(readxl)
 			
 			read_xlsx("data/raw/exercise.xlsx")
@@ -445,46 +478,83 @@
 			
 			str(df)
 			summary(df)
-			
 			nrow(df)
 			ncol(df)
-			
 			names(df)
 		\end{lstlisting}
 		
-		\vspace{0.3cm}
 		
 		These commands help us understand a dataset before analysis.
 		
 	\end{frame}
 	
 	
-	\begin{frame}[fragile]{Selecting Columns}
-		
-		We can select a column of Dataframe using \(\boxed{\texttt{\$}}\):
-		
-		\begin{lstlisting}
-			df$budget
-			# Make a new df with only one column "budget"
-			budget_column <- df$budget
-		\end{lstlisting}
-		
-		Select multiple columns:
-		
-		\begin{lstlisting}
-			df[, c("year", "budget")]
-		\end{lstlisting}
-		
-		Using \texttt{dplyr}:
-		
-		\begin{lstlisting}
-			library(dplyr)
+	\begin{frame}{The Dataframe for Exercise}
+	
+			\centering
+			\scriptsize
 			
-			df %>%
-			select(year, budget)
-		\end{lstlisting}
+			\begin{columns}[T]
+				
+				% Operating
+				\begin{column}{0.48\textwidth}
+					\centering
+					\textbf{Operating}
+					
+					\vspace{0.2cm}
+					
+					\begin{tabular}{rrrrr}
+						\toprule
+						Index & year & budget & revised & actual \\
+						\midrule
+						1  & 2015 & 897  & 843  & 803  \\
+						2  & 2016 & 954  & 880  & 863  \\
+						3  & 2017 & 1032 & 943  & 911  \\
+						4  & 2018 & 1105 & 1104 & 1024 \\
+						5  & 2019 & 1176 & 1129 & 1043 \\
+						6  & 2020 & 1262 & 1219 & 1074 \\
+						7  & 2021 & 1365 & 1205 & 1086 \\
+						8  & 2022 & 1406 & 1268 & 1141 \\
+						9  & 2023 & 1437 & 1345 & 1336 \\
+						10 & 2024 & 1563 & 1417 & 1284 \\
+						11 & 2025 & 1613 & 1469 & 1356 \\
+						\bottomrule
+					\end{tabular}
+					
+				\end{column}
+				
+				% Development
+				\begin{column}{0.48\textwidth}
+					\centering
+					\textbf{Development}
+					
+					\vspace{0.2cm}
+					
+					\begin{tabular}{rrrrr}
+						\toprule
+						Index & year & budget & revised & actual \\
+						\midrule
+						12 & 2015 & 786  & 832  & 677  \\
+						13 & 2016 & 934  & 715  & 845  \\
+						14 & 2017 & 889  & 919  & 910  \\
+						15 & 2018 & 1019 & 905  & 857  \\
+						16 & 2019 & 1061 & 1069 & 949  \\
+						17 & 2020 & 1252 & 1047 & 1070 \\
+						18 & 2021 & 1108 & 1160 & 1050 \\
+						19 & 2022 & 1365 & 1208 & 930  \\
+						20 & 2023 & 1384 & 1226 & 1085 \\
+						21 & 2024 & 1259 & 1321 & 1032 \\
+						22 & 2025 & 1379 & 1464 & 1338 \\
+						\bottomrule
+					\end{tabular}
+					
+				\end{column}
+				
+			\end{columns}
 		
 	\end{frame}
+	
+	
 	
 	\begin{frame}[fragile]{R Packages}
 		
@@ -590,7 +660,35 @@
 	\end{frame}
 	
 	
-	\begin{frame}[fragile]{The Pipe Operator}
+	\begin{frame}[fragile]{Selecting Columns}
+		
+		We can select a column of Dataframe using \(\boxed{\texttt{\$}}\):
+		
+		\begin{lstlisting}
+			df$budget
+			# Make a new df with only one column "budget"
+			budget_column <- df$budget
+		\end{lstlisting}
+		
+		Select multiple columns:
+		
+		\begin{lstlisting}
+			df[, c("year", "budget")]
+		\end{lstlisting}
+		
+		Using \texttt{dplyr}:
+		
+		\begin{lstlisting}
+			library(dplyr)
+			
+			df %>%
+			select(year, budget)
+		\end{lstlisting}
+		
+	\end{frame}
+	
+	
+	\begin{frame}[fragile]{The Pipe Operator \& Filtering Rows}
 		
 		The pipe
 		\(
@@ -600,7 +698,7 @@
 		
 		\begin{lstlisting}
 			df %>%
-			filter(budget > 100) %>%
+			filter(budget > 1500) %>%
 			select(year, budget)
 		\end{lstlisting}
 		
@@ -682,8 +780,8 @@
 		
 		\texttt{summarise()} creates summary statistics.
 		
-		\begin{lstlisting}
-			df %>%
+		\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+		df_summary <- df %>%
 			summarise(
 			total_budget = sum(budget),
 			total_actual = sum(actual),
@@ -693,13 +791,23 @@
 		
 		Grouped summary:
 		
-		\begin{lstlisting}
-			df %>%
-			group_by(year) %>%
+		\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+		df_summary2 <-	df %>%
+			group_by(type) %>%
 			summarise(
 			total_actual = sum(actual)
 			)
 		\end{lstlisting}
+		
+		Summarize selected columns by group:
+		\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+		df_summary3 <-	df %>%
+			group_by(type) %>%
+			summarise(
+			across(c(budget, revised, actual), ~mean(.x, na.rm = TRUE)))
+		\end{lstlisting}
+				
+		
 		
 	\end{frame}
 	
@@ -855,39 +963,60 @@ square(5)
 		\end{lstlisting}
 		
 	\end{frame}
-	% =================================================
-	\section{Importing Data}
-	% =================================================
 	
-	\begin{frame}[fragile]{Importing Data}
+	\begin{frame}[fragile]{Loops in R: \texttt{for} Loop}
 		
-		R can work with many formats:
+		\textbf{A \texttt{for} loop repeats a block of code for each value in a sequence.}
 		
-		\begin{itemize}
-			\item CSV
-			\item Excel
-			\item Stata
-			\item SPSS
-			\item SAS
-			\item SQL databases
-			\item JSON
-		\end{itemize}
+		\vspace{0.3cm}
 		
-		CSV example:
-		
-		\begin{lstlisting}
-			library(readr)
-			df <- read_csv("budget.csv")
+		\begin{lstlisting}[basicstyle=\small\ttfamily]
+			for (i in 1:5) {
+				print(i)
+			}
 		\end{lstlisting}
 		
-		Excel:
+		\vspace{0.2cm}
 		
-		\begin{lstlisting}
-			library(readxl)
-			df <- read_excel("budget.xlsx")
+		\textbf{Example: Loop over budget years}
+		
+		\begin{lstlisting}[basicstyle=\small\ttfamily]
+			years <- 2021:2025
+			
+			for (year in years) {
+				print(year)
+			}
 		\end{lstlisting}
 		
 	\end{frame}
+	
+	\begin{frame}[fragile]{Loops in R: Working with Data Frames}
+		
+		\textbf{Loop through the rows of a data frame:}
+		
+		\begin{lstlisting}[basicstyle=\small\ttfamily]
+			for (i in 1:nrow(df)) {
+				
+				row <- df[i, ]
+				
+				if (row$budget > row$revised) {
+					print(row$year)
+				}
+			}
+		\end{lstlisting}
+		
+		\vspace{0.2cm}
+		
+		\textbf{Useful control statements}
+		
+		\begin{itemize}
+			\item \texttt{next} -- skip the current iteration
+			\item \texttt{break} -- stop the loop completely
+		\end{itemize}
+		
+		
+	\end{frame}
+	
 	
 	
 	\begin{frame}[fragile]{Exporting Data}
@@ -895,15 +1024,20 @@ square(5)
 		Write a CSV file:
 		
 		\begin{lstlisting}
-			write_csv(df, "output.csv")
+			write_csv(df, "data/processed/output.csv")
 		\end{lstlisting}
 		
 		Write an Excel file:
 		
 		\begin{lstlisting}
 			library(writexl)
-			
-			write_xlsx(df, "output.xlsx")
+			write_xlsx(df, "data/processed/output.xlsx")
+		\end{lstlisting}
+		
+		Write the RDS file [R native data]
+				\begin{lstlisting}
+	
+			saveRDS(df, "data/processed/output.rds")
 		\end{lstlisting}
 		
 		\vspace{0.3cm}
@@ -914,6 +1048,57 @@ square(5)
 		
 	\end{frame}
 	
+	\begin{frame}[fragile]{Converting Data to Long Format}
+		
+	
+		
+		\vspace{0.2cm}
+		
+		\textbf{Convert to long format using \texttt{pivot\_longer()}:}
+		
+		\begin{lstlisting}[basicstyle=\small\ttfamily]
+			df_long <- df %>%
+			pivot_longer(
+			cols = c(budget, revised, actual),
+			names_to = "category",
+			values_to = "value"
+			)
+		\end{lstlisting}
+		
+		\vspace{0.2cm}
+		
+		\begin{columns}
+			\begin{column}{0.5\textwidth}
+				\textbf{Result:}
+				
+				\textbf{Original data:}
+			
+			\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+	year    type        budget  revised  actual
+	2015    operating     897      843     803
+	2016    operating     954      880     863
+	2017    operating    1032      943     911
+			\end{lstlisting}
+			\end{column}
+			
+			\begin{column}{0.5\textwidth}
+				\textbf{Result:}
+				
+				\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+	year       type        category   value
+	2015    operating       budget      897
+	2015    operating       revised     843
+	2015    operating       actual      803
+	2016    operating       budget      954
+	2016    operating       revised     880
+	2016    operating       actual      863
+				\end{lstlisting}
+				
+			\end{column}
+		\end{columns}
+		
+		
+	\end{frame}
 	
 	% =================================================
 	\section{Data Visualization}
@@ -1005,108 +1190,345 @@ square(5)
 		
 		A graph can be improved with:
 		
-		\begin{lstlisting}
-			ggplot(df, aes(x = year, y = actual)) +
-			geom_col() +
-			labs(
-			title = "Actual Expenditure",
-			x = "Fiscal Year",
-			y = "Amount"
-			) +
-			theme_minimal()
-		\end{lstlisting}
-		
-		\vspace{0.3cm}
-		
-		\begin{block}{Principle}
-			A good visualization should make the important message easier
-			to understand, not merely make the graph more decorative.
-		\end{block}
-		
-	\end{frame}
-	
-	
-	% =================================================
-	\section{A Budget Analysis Example}
-	% =================================================
-	
-	\begin{frame}{Example: Government Budget Data}
-		
-		Suppose our dataset contains:
-		
-		\begin{table}
-			\centering
-			\begin{tabular}{lll}
-				\toprule
-				Year & Budget & Actual \\
-				\midrule
-				2021--22 & 100 & 92 \\
-				2022--23 & 120 & 101 \\
-				2023--24 & 140 & 125 \\
-				2024--25 & 160 & 132 \\
-				2025--26 & 180 & 145 \\
-				\bottomrule
-			\end{tabular}
-		\end{table}
-		
-		We want to examine:
-		
-		\begin{itemize}
-			\item Budget growth
-			\item Actual expenditure
-			\item Budget utilization
-		\end{itemize}
-		
-	\end{frame}
-	
-	
-	\begin{frame}[fragile]{Calculate Budget Utilization}
-		
-		\begin{lstlisting}
-			df <- df %>%
-			mutate(
-			utilization =
-			actual / budget * 100
-			)
-		\end{lstlisting}
-		
-		We can then inspect:
-		
-		\begin{lstlisting}
-			df %>%
-			select(year, budget,
-			actual, utilization)
-		\end{lstlisting}
-		
-		This transforms raw budget data into an analytical indicator.
-		
-	\end{frame}
-	
-	
-	\begin{frame}[fragile]{Visualizing Budget and Actual}
-		
-		\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
-			df_long <- df %>%
-			pivot_longer(
-			cols = c(budget, actual),
-			names_to = "type",
-			values_to = "amount"
-			)
+		\begin{columns}[T,onlytextwidth]
 			
-			ggplot(
-			df_long,
-			aes(
-			x = year,
-			y = amount,
-			fill = type
-			)
-			) +
-			geom_col(
-			position = "dodge"
-			) +
-			theme_minimal()
-		\end{lstlisting}
+			%------------------------------------------------
+			% Left: R code
+			%------------------------------------------------
+			\begin{column}{0.35\textwidth}
+				
+				\textbf{R code}
+				
+				\vspace{0.15cm}
+				
+				\begin{lstlisting}[
+					basicstyle=\tiny\ttfamily,
+					frame=single,
+					breaklines=true
+					]
+p <- ggplot(
+	df_long,
+	aes(
+	x = year,
+	y = value,
+	fill = category
+	)
+	) +
+	
+	# Bars
+	geom_col(
+	position = position_dodge(width = 0.8),
+	width = 0.7
+	)
+				\end{lstlisting}
+				
+			\end{column}
+			
+			%------------------------------------------------
+			% Right: Graph
+			%------------------------------------------------
+			\begin{column}{0.65\textwidth}
+				
+				\centering\textbf{Output}
+				
+				\vspace{0.15cm}
+				
+				\centering
+				\includegraphics[
+				width=\linewidth,
+				height=0.70\textheight,
+				keepaspectratio
+				]{resource/ggplot1.png}
+				
+			\end{column}
+			
+		\end{columns}
+	\end{frame}
+	
+	
+	\begin{frame}[fragile]{Professional Visualization 2}
 		
+		A graph can be improved with:
+		
+		\begin{columns}[T,onlytextwidth]
+			
+			%------------------------------------------------
+			% Left: R code
+			%------------------------------------------------
+			\begin{column}{0.35\textwidth}
+				
+				\textbf{R code}
+				
+				\vspace{0.15cm}
+				
+				\begin{lstlisting}[
+					basicstyle=\tiny\ttfamily,
+					frame=single,
+					breaklines=true
+					]
+p +
+
+# Edit the titles of the plot, x and y axis
+
+labs(
+	title = "Budget, Actual and Revised Expenditure",
+	x = "Fiscal Year",
+	y = "Expenditure",
+	fill = NULL
+) 
+				\end{lstlisting}
+				
+			\end{column}
+			
+			%------------------------------------------------
+			% Right: Graph
+			%------------------------------------------------
+			\begin{column}{0.65\textwidth}
+				
+				\centering\textbf{Output}
+				
+				\vspace{0.15cm}
+				
+				\centering
+				\includegraphics[
+				width=\linewidth,
+				height=0.70\textheight,
+				keepaspectratio
+				]{resource/ggplot2.png}
+				
+			\end{column}
+			
+		\end{columns}
+	\end{frame}
+	
+	
+	\begin{frame}[fragile]{Professional Visualization 3}
+		
+		A graph can be improved with:
+		
+		\begin{columns}[T,onlytextwidth]
+			
+			%------------------------------------------------
+			% Left: R code
+			%------------------------------------------------
+			\begin{column}{0.35\textwidth}
+				
+				\textbf{R code}
+				
+				\vspace{0.15cm}
+				
+				\begin{lstlisting}[
+					basicstyle=\tiny\ttfamily,
+					frame=single,
+					breaklines=true
+					]
+p +
+
+# edit the bar color and legend label
+scale_fill_manual(
+	values = c(
+		budget = "#4472C4",
+		actual = "#70AD47",
+		revised = "#ED7D31"
+	),
+	labels = c(
+		budget = "Budget",
+		actual = "Actual",
+		revised = "Revised"
+	)
+	) 
+				\end{lstlisting}
+				
+			\end{column}
+			
+			%------------------------------------------------
+			% Right: Graph
+			%------------------------------------------------
+			\begin{column}{0.65\textwidth}
+				
+				\centering\textbf{Output}
+				
+				\vspace{0.15cm}
+				
+				\centering
+				\includegraphics[
+				width=\linewidth,
+				height=0.70\textheight,
+				keepaspectratio
+				]{resource/ggplot3.png}
+				
+			\end{column}
+			
+		\end{columns}
+	\end{frame}
+	
+	
+	\begin{frame}[fragile]{Professional Visualization 4}
+		
+		A graph can be improved with:
+		
+		\begin{columns}[T,onlytextwidth]
+			
+			%------------------------------------------------
+			% Left: R code
+			%------------------------------------------------
+			\begin{column}{0.35\textwidth}
+				
+				\textbf{R code}
+				
+				\vspace{0.15cm}
+				
+				\begin{lstlisting}[
+					basicstyle=\tiny\ttfamily,
+					frame=single,
+					breaklines=true
+					]
+p +
+
+# edit the y axis values
+scale_y_continuous(
+	labels = scales::comma,
+	expand = expansion(mult = c(0, 0.05))
+) +
+
+# x axis to show all the years
+scale_x_continuous(
+	breaks = 2015:2025,
+	labels = 2015:2025
+)
+				\end{lstlisting}
+				
+			\end{column}
+			
+			%------------------------------------------------
+			% Right: Graph
+			%------------------------------------------------
+			\begin{column}{0.65\textwidth}
+				
+				\centering\textbf{Output}
+				
+				\vspace{0.15cm}
+				
+				\centering
+				\includegraphics[
+				width=\linewidth,
+				height=0.70\textheight,
+				keepaspectratio
+				]{resource/ggplot4.png}
+				
+			\end{column}
+			
+		\end{columns}
+	\end{frame}
+	
+	
+	\begin{frame}[fragile]{Professional Visualization 5}
+		
+		A graph can be improved with:
+		
+		\begin{columns}[T,onlytextwidth]
+			
+			%------------------------------------------------
+			% Left: R code
+			%------------------------------------------------
+			\begin{column}{0.35\textwidth}
+				
+				\textbf{R code}
+				
+				\vspace{0.15cm}
+				
+				\begin{lstlisting}[
+					basicstyle=\tiny\ttfamily,
+					frame=single,
+					breaklines=true
+					]
+p +
+	
+# a theme to use
+theme_minimal(base_size = 14)
+				\end{lstlisting}
+				
+			\end{column}
+			
+			%------------------------------------------------
+			% Right: Graph
+			%------------------------------------------------
+			\begin{column}{0.65\textwidth}
+				
+				\centering\textbf{Output}
+				
+				\vspace{0.15cm}
+				
+				\centering
+				\includegraphics[
+				width=\linewidth,
+				height=0.70\textheight,
+				keepaspectratio
+				]{resource/ggplot5.png}
+				
+			\end{column}
+			
+		\end{columns}
+	\end{frame}
+	
+	
+	\begin{frame}[fragile]{Professional Visualization 6}
+		
+		A graph can be improved with:
+		
+		\begin{columns}[T,onlytextwidth]
+			
+			%------------------------------------------------
+			% Left: R code
+			%------------------------------------------------
+			\begin{column}{0.35\textwidth}
+				
+				\textbf{R code}
+				
+				\vspace{0.15cm}
+				
+				\begin{lstlisting}[
+					basicstyle=\tiny\ttfamily,
+					frame=single,
+					breaklines=true
+					]
+p +
+
+# editing 
+theme(
+	plot.title = element_text(
+		size = 18,
+		face = "bold"
+	),
+	axis.title = element_text(face = "bold"),
+	panel.grid.major.x = element_blank(),
+	panel.grid.minor = element_blank(),
+	legend.position = "top"
+)
+					
+				\end{lstlisting}
+				
+			\end{column}
+			
+			%------------------------------------------------
+			% Right: Graph
+			%------------------------------------------------
+			\begin{column}{0.65\textwidth}
+				
+				\centering\textbf{Output}
+				
+				\vspace{0.15cm}
+				
+				\centering
+				\includegraphics[
+				width=\linewidth,
+				height=0.70\textheight,
+				keepaspectratio
+				]{resource/ggplot6.png}
+				
+			\end{column}
+			
+		\end{columns}
 	\end{frame}
 	
 	
@@ -1197,7 +1619,7 @@ square(5)
 		
 		\begin{center}
 			
-			\Large
+			\large
 			Import Data
 			
 			$\downarrow$
@@ -1234,10 +1656,14 @@ square(5)
 	\section{Conclusion}
 	% =================================================
 	
-	\begin{frame}{Key Takeaways}
+	\begin{frame}{What can be done for Budget Analysis}
 		
 		\begin{itemize}
-			\item R is a powerful tool for data analysis and statistical computing.
+			\item Graphs for Working Paper can be automated.
+			
+			\item Economic code wise and office wise graphs can be generated to see the trends
+			
+			\item 
 			
 			\item Learn the basic building blocks:
 			\begin{itemize}

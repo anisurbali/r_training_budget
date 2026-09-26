@@ -1,12 +1,19 @@
 ---
-title: "README"
+title: "R for Budget Analysis"
+author: "Md. Anisur Rahman Bali"
 format: typst
 editor: visual
 ---
 
-## Workship on R for Budget Analysis
+## Get the Project Folder
 
-This file explains how to set the folder and start your hand-on-exercise and budget analysis.
+<https://github.com/anisurbali/r_training_budget>
+
+Click on \<\>Code then Download ZIP
+
+## Description of the project folder
+
+This file explains how to set the folder and start your hand-on-exercise on budget analysis.
 
 ## Folder Structure
 
@@ -119,3 +126,68 @@ ncol(df)
 
 names(df)
 ```
+
+E6: Select columns of a dataframe
+
+``` r
+#select single column
+x <- df$budget
+# Make a new df with only one column "budget"
+x <- budget_column <- df$budget
+
+#select multiple columns
+# built-in 
+y <- df[, c("year", "budget")]
+
+# dplyr package
+y <- df %>%
+  select(year, budget)
+```
+
+E7: Select rows that have budget value more than 1500 and then keep the year, budget and actual columns
+
+``` r
+z <- df %>%
+  filter(budget > 1500) %>%
+  select(year, budget)
+```
+
+E8: Create a new column from the existing columns (utilization = actual/budget)
+
+``` r
+df <- df %>%
+  mutate(
+    utilization_pct = actual / budget * 100)
+```
+
+E9: Summarize the columns.
+
+1.  Create df with three summary columns, total_budget, total_actual, average_actual
+
+2.  Create the same df by grouping by type. It will create two rows for two type
+
+3.  Create summary over existing columns by giving a formula
+
+    ``` r
+
+    df_summary <- df %>%
+      summarise(
+        total_budget = sum(budget),
+        total_actual = sum(actual),
+        average_actual = mean(actual)
+      )
+
+    df_summary2 <- df %>%
+      group_by(type)%>%
+      summarise(
+        total_budget = sum(budget),
+        total_actual = sum(actual),
+        average_actual = mean(actual)
+      )
+
+    df_summary3 <-  df %>%
+      group_by(type) %>%
+      summarise(
+        across(c(budget, revised, actual), ~mean(.x, na.rm = TRUE))
+      )
+    ```
