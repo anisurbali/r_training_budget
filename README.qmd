@@ -1,0 +1,121 @@
+---
+title: "README"
+format: typst
+editor: visual
+---
+
+## Workship on R for Budget Analysis
+
+This file explains how to set the folder and start your hand-on-exercise and budget analysis.
+
+## Folder Structure
+
+The "r-training-budget" folder contains all the necessary folders and fils. It is structured as follows:
+
+r_training_budget
+
+``` latex
+            budget-analysis/
+            |
+            |-- data/
+            |   |-- raw/
+            |   |-- processed/
+            |
+            |-- R/
+            |   |-- budget_wc.R
+            |   |-- economic_code_analysis.R
+            |   |-- hand-on-exercises.R
+            |
+            |-- output/
+            |   |-- figures/
+            |
+            |-- report/
+            |
+            |-- budget-analysis.Rproj
+```
+
+1.  We should always open the project from the **budget-analysis.Rproj** file.
+
+2.  The raw folder inside data contains the raw data. We will import raw data from here and will analyze on this.
+
+3.  The excel file in the raw folder must be in specific format so that script can read the columns.
+
+4.  After processing raw data, we will save data in the processed folder for later use.
+
+5.  R folder contains the .R scripts which we can run by opening
+
+6.  **budget_wc.R** file is the script for importing raw budget data in excel. This script then generates five graphs we need on our working paper.
+
+7.  **economic_code_analysis.R** is another script for generating economic code wise/ office wise graphs to see the budget trends and identify the anomalies.
+
+8.  output folder is where the scripts will export the graphs.
+
+9.  The report folder contains quarto script. Quarto is another tool of R software to generate reports in words, pdf, html and in many other forms. Here we are generating three tables we use in our working papers using the budget data in raw folder.
+
+## Hand-on-exercises
+
+E1: Write the following codes on consoles one at a time and also run from the training script
+
+``` r
+2 + 3
+10 * 5
+100 / 4
+2^5
+sqrt(25)
+```
+
+E2: Write some comments and calculate the mean of some values.
+
+``` r
+# Calculate the average expenditure
+
+x <- c(100, 120, 150, 180)
+
+mean(x)
+```
+
+E3: Create some variables and assign values to them
+
+``` r
+x <- 100
+name <- "Bangladesh"
+rate <- 0.075
+```
+
+E4: Create a dataframe
+
+``` r
+df <- data.frame(
+  year = c("2023-24", "2024-25", "2025-26"),
+  budget = c(100, 120, 150),
+  actual = c(95, 110, 130)
+)
+```
+
+E5: Import an excel file
+
+``` r
+# import the exercise file in the data>raw folder
+
+l
+library(readxl)
+
+df <- read_xlsx("data/raw/exercise.xlsx")
+
+# here() package is more useful for opening a file
+
+library(here)
+df <- read_xlsx(here("data", "raw", "exercise.xlsx"))
+
+
+head(df)
+tail(df)
+
+str(df)
+summary(df)
+
+nrow(df)
+ncol(df)
+
+names(df)
+```

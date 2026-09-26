@@ -429,11 +429,17 @@
 	\end{frame}
 	
 	
-	\begin{frame}[fragile]{Inspecting a Data Frame}
+	\begin{frame}[fragile]{Import a Data Frame and Explore}
 		
 		Useful commands:
 		
 		\begin{lstlisting}
+			# import the exercise file in the data>raw folder
+			
+			library(readxl)
+			
+			read_xlsx("data/raw/exercise.xlsx")
+			
 			head(df)
 			tail(df)
 			
@@ -1105,7 +1111,7 @@ square(5)
 	
 	
 	% =================================================
-	\section{Reproducible Research}
+	\section{Reproducible Analysis/Research}
 	% =================================================
 	
 	\begin{frame}{Why Reproducibility Matters}
@@ -1186,10 +1192,6 @@ square(5)
 	
 	
 	
-	
-	% =================================================
-	\section{From Beginner to Analyst}
-	% =================================================
 	
 	\begin{frame}{A Typical R Workflow}
 		
