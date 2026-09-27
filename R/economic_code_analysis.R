@@ -20,9 +20,20 @@ library(here)
 
 
 
-df <- read_xlsx(here("data", "raw", "125_Education_detail_total.xlsx"))
+df <- read_xlsx(here("data", "raw", "126_Science_detail_Total.xlsx"))
 
 # here df specific columns are being divided by 10000
+
+
+# Columns to be summed
+value_cols <- c(
+  "budget_2020_21", "budget_2021_22", "budget_2022_23", "budget_2023_24", "budget_2024_25", "budget_2025_26",
+  "actual_2020_21", "actual_2021_22", "actual_2022_23", "actual_2023_24", "actual_2024_25", "actual_2025_26",
+  "revised_2020_21", "revised_2021_22", "revised_2022_23", "revised_2023_24", "revised_2024_25", "revised_2025_26",
+  "budget_2026_27", "budget_2027_28", "budget_2028_29"
+)
+
+
 
 df <- df %>%
   mutate(
@@ -42,13 +53,6 @@ df_op <- df %>%
 
 ## summarize econnomic group over office groups
 
-# Columns to be summed
-value_cols <- c(
-  "budget_2020_21", "budget_2021_22", "budget_2022_23", "budget_2023_24", "budget_2024_25", "budget_2025_26",
-  "actual_2020_21", "actual_2021_22", "actual_2022_23", "actual_2023_24", "actual_2024_25", "actual_2025_26",
-  "revised_2020_21", "revised_2021_22", "revised_2022_23", "revised_2023_24", "revised_2024_25", "revised_2025_26",
-  "budget_2026_27", "budget_2027_28", "budget_2028_29"
-)
 
 
 # make group office and generel / activity wise economic code values
@@ -174,7 +178,7 @@ for (i in 1:nrow(df_office)){  #nrow(df_office)
   # }
   
   row <- row %>% pivot_longer(
-    cols = c(3:last_col()),
+    cols = c(4:last_col()),
     names_to = "year",
     values_to = "amount"
   )
