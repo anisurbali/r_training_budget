@@ -17,7 +17,7 @@ library(ggplot2)
 
 ## load an excel file, it is stored in data folder inside raw, check it
 
-df <- read_xlsx("data/raw/116_detail_budget_Total.xlsx")
+df <- read_xlsx("data/raw/125_Education_detail_total.xlsx")
 
 
 
@@ -69,14 +69,14 @@ df_total <- bind_rows(
     mutate(category = "Operating"),
   
   df %>%
-    filter(substr(as.character(activity_code), 1, 1) == "2") %>%
+    filter(!is.na(activity_code) & substr(as.character(activity_code), 1, 1) != "1") %>%
     summarise(across(all_of(value_cols), ~ sum(.x, na.rm = TRUE))) %>%
     mutate(category = "Development"),
   
   df %>%
     summarise(across(all_of(value_cols), ~ sum(.x, na.rm = TRUE))) %>%
     mutate(category = "Total")
-) %>%
+    ) %>%
   select(category, all_of(value_cols))
 
 

@@ -18,6 +18,9 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{booktabs}
+\usepackage{pgfpages}
+
+%\pgfpagesuselayout{2 on 1}[a4paper,border shrink=5mm]
 
 % -------------------------------------------------
 % R code style
@@ -60,7 +63,7 @@
 % -------------------------------------------------
 \title{R for Budget Analysis}
 \subtitle{Data Analysis, Visualization and Reproducible Scripts}
-\author{Md. Anisur Rahman Bali}
+\author{}
 \institute{Finance Division\\Ministry of Finance, Bangladesh}
 \date{28 September 2026}
 
@@ -178,6 +181,54 @@
 		\end{columns}
 		
 	\end{frame}
+	
+	
+	\begin{frame}{Excel vs R}
+		
+		\begin{columns}[T]
+			
+			% ---------------- Excel ----------------
+			\begin{column}{0.47\textwidth}
+				
+				\begin{block}{Excel}
+					\begin{itemize}
+						\item Intuitive and easy to learn
+						\item Excellent for manual data entry
+						\item Flexible for quick calculations
+						\item Strong for small and medium datasets
+						\item Interactive tables and dashboards
+						\item Easy to share with non-programmers
+					\end{itemize}
+					
+				\end{block}
+				
+			\end{column}
+			
+			% ---------------- R ----------------
+			\begin{column}{0.47\textwidth}
+				
+				\begin{block}{R}
+					\begin{itemize}
+						\item Code-based and reproducible
+						\item Designed for data analysis
+						\item Handles large datasets efficiently
+						\item Powerful statistical and econometric tools
+						\item Excellent data visualization
+						\item Easy to automate repetitive tasks
+					\end{itemize}
+					
+				\end{block}
+				
+			\end{column}
+			
+		\end{columns}
+		
+		\vspace{0.3cm}
+		
+	
+		
+	\end{frame}
+	
 	
 	
 	\begin{frame}{R vs. RStudio}
@@ -1661,32 +1712,13 @@ theme(
 		\begin{itemize}
 			\item Graphs for Working Paper can be automated.
 			
+			\item Tables for Working Paper can be automated.
+			
 			\item Economic code wise and office wise graphs can be generated to see the trends
 			
-			\item 
+			\item Finding out the anomalies.
 			
-			\item Learn the basic building blocks:
-			\begin{itemize}
-				\item Objects
-				\item Vectors
-				\item Data frames
-				\item Functions
-			\end{itemize}
-			
-			\item Learn the core workflow:
-			\[
-			\text{Import}
-			\rightarrow
-			\text{Clean}
-			\rightarrow
-			\text{Analyze}
-			\rightarrow
-			\text{Visualize}
-			\]
-			
-			\item Practice with real datasets.
-			
-			\item Focus on reproducibility.
+			\item Generating reports
 		\end{itemize}
 		
 	\end{frame}

@@ -20,7 +20,14 @@ library(here)
 
 
 
-df <- read_xlsx(here("data", "raw", "116_detail_budget_Total.xlsx"))
+df <- read_xlsx(here("data", "raw", "125_Education_detail_total.xlsx"))
+
+# here df specific columns are being divided by 10000
+
+df <- df %>%
+  mutate(
+    across(all_of(value_cols), ~ .x / 10000)
+  )
 
 
 #################################################################
@@ -56,11 +63,19 @@ df_op_group <- df_op %>%
 ## for every office group and activity type generate a graph for each
 # economic code under general activity or special activity
 
-for (i in 1:50){  #nrow(df_op_group)
+for (i in 1:nrow(df_op_group)){  #nrow(df_op_group)
   
-  # df_op_group has 531 rows it will generate all of them
+  # df_op_group has 1596 rows it will generate all of them
   
   row <- df_op_group[i, ]  # every time taking only one row
+  
+  if (row$budget_2026_27 == 0){
+    next
+  }
+  
+  if (row$revised_2025_26 != 0 & row$budget_2026_27/row$revised_2025_26<1.1){
+    next
+  }
   
   row <- row %>% pivot_longer(
     cols = c(6:last_col()),
@@ -93,7 +108,8 @@ for (i in 1:50){  #nrow(df_op_group)
     
     geom_text(aes(label = sprintf("%.2f", amount)),
               vjust = -0.7,
-              size = 3) +
+              size = 3,
+              show.legend = FALSE) +
     
     labs(
       title = paste(econcode, "-", codename, "    ", office_name, activity),
@@ -116,7 +132,7 @@ for (i in 1:50){  #nrow(df_op_group)
   dev.off()
   
   if (i %% 10 == 0){
-  print(cat(round(i/nrow(df_op_group) * 100, 0),"%", "Complete" ))
+  cat(round(i/nrow(df_op_group) * 100, 0),"%", "Complete\n" )
   }
 }
 
@@ -149,7 +165,7 @@ for (i in 1:nrow(df_office)){  #nrow(df_office)
   
   # Condition to filter the graphs
   
-  # row <- df_office[i, ]
+  row <- df_office[i, ]
   # 
   # increase <- row$budget_2026_27 / row$revised_2025_26
   # 
@@ -158,7 +174,7 @@ for (i in 1:nrow(df_office)){  #nrow(df_office)
   # }
   
   row <- row %>% pivot_longer(
-    cols = c(6:last_col()),
+    cols = c(3:last_col()),
     names_to = "year",
     values_to = "amount"
   )
@@ -212,7 +228,7 @@ for (i in 1:nrow(df_office)){  #nrow(df_office)
   
   
   if (i %% 10 == 0){
-    print(cat(round(i/nrow(df_op_group) * 100, 0),"%", "Complete" ))
+    print(cat(round(i/nrow(df_op_group) * 100, 0),"%", "Complete"))
   }
 }
 
