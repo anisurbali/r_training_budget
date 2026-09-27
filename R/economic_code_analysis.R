@@ -19,8 +19,11 @@ library(here)
 
 
 
+# df <- read_xlsx("data/raw/125_Education_detail_total.xlsx")
+# 
+# df <- read_xlsx("data/raw/126_Science_detail_Total.xlsx")
 
-df <- read_xlsx(here("data", "raw", "126_Science_detail_Total.xlsx"))
+df <- read_xlsx("data/raw/160_Technical_Total.xlsx")
 
 # here df specific columns are being divided by 10000
 
