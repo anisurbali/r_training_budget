@@ -21,9 +21,9 @@ library(here)
 
 # df <- read_xlsx("data/raw/125_Education_detail_total.xlsx")
 # 
-# df <- read_xlsx("data/raw/126_Science_detail_Total.xlsx")
+ df <- read_xlsx("data/raw/126_Science_detail_Total.xlsx")
 
-df <- read_xlsx("data/raw/160_Technical_Total.xlsx")
+# df <- read_xlsx("data/raw/160_Technical_Total.xlsx")
 
 # here df specific columns are being divided by 10000
 
@@ -45,7 +45,7 @@ df <- df %>%
 
 
 #################################################################
-#           Office Wise Economic Code Analysis for Operating Budget
+#           Office Group Wise Economic Code Analysis for Operating Budget
 ################################################################
 
 
@@ -80,6 +80,7 @@ for (i in 1:nrow(df_op_group)){  #nrow(df_op_group)
     next
   }
   
+  # A condition which graphs to be generated
   if (row$revised_2025_26 != 0 & row$budget_2026_27/row$revised_2025_26<1.1){
     next
   }
